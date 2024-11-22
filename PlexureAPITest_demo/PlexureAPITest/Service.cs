@@ -1,28 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using PlexureAPITest.Config;
+using TechTalk.SpecFlow.Configuration;
+using static PlexureAPITest.Config.TestConfig;
 
 namespace PlexureAPITest
 {
     public class Service : IDisposable
     {
         HttpClient client;
+        ApiConfig apiConfig;
 
         public Service()
         {
-           
-            client = new HttpClient { BaseAddress = new Uri("https://qatestapi.azurewebsites.net") };
+            // Load the configuration from appsettings.json
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-            client.DefaultRequestHeaders
-                  .Accept
-                  .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            IConfiguration configuration = builder.Build();
+            apiConfig = configuration.GetSection("ApiConfig").Get<ApiConfig>();
 
-            client.DefaultRequestHeaders.Add("token", "37cb9e58-99db-423c-9da5-42d5627614c5");
+            client = new HttpClient { BaseAddress = new Uri(apiConfig.BaseUrl) };
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         public void UpdateAuthenicationTokenFromRequestHeader(string authToken)
