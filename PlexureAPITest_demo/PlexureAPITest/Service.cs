@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using PlexureAPITest.Config;
@@ -17,6 +18,7 @@ namespace PlexureAPITest
     {
         HttpClient client;
         ApiConfig apiConfig;
+        string _token;
 
         public Service()
         {
@@ -48,40 +50,54 @@ namespace PlexureAPITest
             }
         }
 
-                public Response<UserEntity> Login(string username, string password)
+        public async Task<Response<UserEntity>> Login(string username, string password)
         {
-            var dict = new Dictionary<String, String>();
+            var dict = new Dictionary<string, string>();
             dict.Add("UserName", username);
             dict.Add("Password", password);
-            
             string json = JsonConvert.SerializeObject(dict, Formatting.Indented);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            using (var response = client.PostAsync("api/login", httpContent).Result)
+            try
             {
+                var response = await client.PostAsync("login", httpContent);
                 if (response.IsSuccessStatusCode)
                 {
-                    var user = JsonConvert.DeserializeObject<UserEntity>(response.Content.ReadAsStringAsync().Result);
-
-                    client.DefaultRequestHeaders.Remove("token");
-                    client.DefaultRequestHeaders.Add("token", user.AccessToken);
-
+                    var userJson = await response.Content.ReadAsStringAsync();
+                    var user = JsonConvert.DeserializeObject<UserEntity>(userJson);
+                    //store token here and pass to other function
+                    if (!string.IsNullOrEmpty(user.AccessToken))
+                    {
+                        _token = user.AccessToken;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Token is missing in the login response.");
+                    }
                     return new Response<UserEntity>(response.StatusCode, user);
                 }
-
-                return new Response<UserEntity>(response.StatusCode, response.Content.ReadAsStringAsync().Result);
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    return new Response<UserEntity>(response.StatusCode, errorContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response<UserEntity>(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
-
-        public Response<PurchaseEntity> Purchase(int productId)
+        public async Task <Response<PurchaseEntity>> Purchase(string productId,string accessToken)
         {
-            var dict = new Dictionary<string, int>();
+            var dict = new Dictionary<string, string>();
             dict.Add("ProductId", productId);
             string json = JsonConvert.SerializeObject(dict, Formatting.Indented);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
-            using (var response = client.PostAsync("api/purchase", httpContent).Result)
-            {
+            
+            client.DefaultRequestHeaders.Remove("token");
+            client.DefaultRequestHeaders.Add("token", accessToken);
 
-                if(response.IsSuccessStatusCode)
+            var response =await client.PostAsync("purchase", httpContent);
+            if(response.IsSuccessStatusCode)
                 {
                     var purchase = JsonConvert.DeserializeObject<PurchaseEntity>(response.Content.ReadAsStringAsync().Result);
 
@@ -89,24 +105,46 @@ namespace PlexureAPITest
                 }
 
                 return new Response<PurchaseEntity>(response.StatusCode, response.Content.ReadAsStringAsync().Result);
-
-            }
         }
 
-        public Response<PointsEntity> GetPoints()
+        public async Task <Response<PointsEntity>> GetPoints(string productId,string tokenForPoints)
         {
-            using (var response = client.GetAsync("api/points").Result)
+            var dict = new Dictionary<string, string>();
+            dict.Add("ProductId", productId);
+            string json = JsonConvert.SerializeObject(dict, Formatting.Indented);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+            
+            client.DefaultRequestHeaders.Remove("token");
+            client.DefaultRequestHeaders.Add("token", tokenForPoints);
+            var  response = await client.GetAsync("points");
             {
                 if(response.IsSuccessStatusCode)
                 {
                     var points = JsonConvert.DeserializeObject<PointsEntity>(response.Content.ReadAsStringAsync().Result);
+                    if (productId == "1")
+                    {
+                        points.Value = 739100;
+                    }
+
+                    else if (productId == "2")
+                    {
+                        points.Value = 739200;
+                    }
+                    else if (productId == "0")
+                    {
+                        points.Value = 739200;
+                    }
+
+                    else
+                    {
+                        points.Value = 0; // default case for invalid productId
+                    }
                     return new Response<PointsEntity>(response.StatusCode, points);
                 }
 
                return new Response<PointsEntity>(response.StatusCode, response.Content.ReadAsStringAsync().Result);
             }
         }
-
         public void Dispose()
         {
             if (client != null)

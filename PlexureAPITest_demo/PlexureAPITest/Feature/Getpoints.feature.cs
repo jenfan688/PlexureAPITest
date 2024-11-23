@@ -74,17 +74,19 @@ namespace PlexureAPITest.Feature
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get Points with correct token")]
-        [NUnit.Framework.TestCaseAttribute("ValidID", "1", "200", null)]
-        [NUnit.Framework.TestCaseAttribute("InvalideID", "10", "400", null)]
-        public void GetPointsWithCorrectToken(string caseID, string productId, string statuscode, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Get Points with product id data")]
+        [NUnit.Framework.TestCaseAttribute("0", "37cb9e58-99db-423c-9da5-42d5627614c5", "739200", "202", null)]
+        [NUnit.Framework.TestCaseAttribute("1", "37cb9e58-99db-423c-9da5-42d5627614c5", "739100", "202", null)]
+        [NUnit.Framework.TestCaseAttribute("2", "37cb9e58-99db-423c-9da5-42d5627614c5", "739200", "202", null)]
+        public void GetPointsWithProductIdData(string productId, string token, string points, string statuscode, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            argumentsOfScenario.Add("CaseID", caseID);
             argumentsOfScenario.Add("productId", productId);
+            argumentsOfScenario.Add("token", token);
+            argumentsOfScenario.Add("points", points);
             argumentsOfScenario.Add("statuscode", statuscode);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Points with correct token", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Points with product id data", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 4
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -96,7 +98,7 @@ namespace PlexureAPITest.Feature
             {
                 this.ScenarioStart();
 #line 5
- testRunner.Given("I got the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given(string.Format("I have token {0}", token), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
  testRunner.And(string.Format("I have product id {0}", productId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -105,28 +107,43 @@ namespace PlexureAPITest.Feature
  testRunner.And("I GET points", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 8
- testRunner.Then(string.Format("The respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("The get points respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+                TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                            "key",
+                            "value"});
+                table1.AddRow(new string[] {
+                            "UserId",
+                            "1"});
+                table1.AddRow(new string[] {
+                            "Points",
+                            string.Format("{0}", points)});
+#line 9
+ testRunner.Then("The get points resonpse key should have values", ((string)(null)), table1, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Get Points with incorrect token")]
-        [NUnit.Framework.TestCaseAttribute("NullToken", "1", "1", "401", null)]
-        [NUnit.Framework.TestCaseAttribute("SringToken", "test", "1", "401", null)]
-        [NUnit.Framework.TestCaseAttribute("InvalidToken", "%^#$", "1", "401", null)]
-        public void GetPointsWithIncorrectToken(string caseID, string incorrectToken, string productId, string statuscode, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Get Points with incorrect data")]
+        [NUnit.Framework.TestCaseAttribute("InvalideID", "37cb9e58-99db-423c-9da5-42d5627614c5", "10", "400", null)]
+        [NUnit.Framework.TestCaseAttribute("ProductIDNull", "37cb9e58-99db-423c-9da5-42d5627614c5", "", "500", null)]
+        [NUnit.Framework.TestCaseAttribute("ProductIDIllegal", "37cb9e58-99db-423c-9da5-42d5627614c5", "&^%$", "500", null)]
+        [NUnit.Framework.TestCaseAttribute("InvalideToken", "37cb9e58-99db-423c-9da5-42d5627617c5", "1", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("TokenNull", "", "1", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("TokenIllegal", "*&^%$#####", "1", "401", null)]
+        public void GetPointsWithIncorrectData(string caseID, string token, string productId, string statuscode, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("CaseID", caseID);
-            argumentsOfScenario.Add("incorrectToken", incorrectToken);
+            argumentsOfScenario.Add("token", token);
             argumentsOfScenario.Add("productId", productId);
             argumentsOfScenario.Add("statuscode", statuscode);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Points with incorrect token", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 16
- this.ScenarioInitialize(scenarioInfo);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Get Points with incorrect data", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 20
+this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
             {
@@ -135,20 +152,17 @@ namespace PlexureAPITest.Feature
             else
             {
                 this.ScenarioStart();
-#line 17
- testRunner.Given(string.Format("I put token as {0}", incorrectToken), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 21
+ testRunner.Given(string.Format("I have token {0}", token), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 18
+#line 22
  testRunner.And(string.Format("I have product id {0}", productId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 19
+#line 23
  testRunner.And("I GET points", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 20
- testRunner.And("I got the purchase points", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 21
- testRunner.Then(string.Format("The respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 24
+ testRunner.Then(string.Format("The get points respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

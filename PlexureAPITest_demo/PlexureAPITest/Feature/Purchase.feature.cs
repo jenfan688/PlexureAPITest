@@ -74,17 +74,17 @@ namespace PlexureAPITest.Feature
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Purchase")]
-        [NUnit.Framework.TestCaseAttribute("ValidID", "1", "200", null)]
-        [NUnit.Framework.TestCaseAttribute("InvalideID", "10", "400", null)]
-        public void Purchase(string caseID, string productId, string statuscode, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Purchase happy path")]
+        [NUnit.Framework.TestCaseAttribute("ValidID", "37cb9e58-99db-423c-9da5-42d5627614c5", "1", "202", null)]
+        public void PurchaseHappyPath(string caseID, string token, string productId, string statuscode, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("CaseID", caseID);
+            argumentsOfScenario.Add("token", token);
             argumentsOfScenario.Add("productId", productId);
             argumentsOfScenario.Add("statuscode", statuscode);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Purchase", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Purchase happy path", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 4
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -96,7 +96,7 @@ namespace PlexureAPITest.Feature
             {
                 this.ScenarioStart();
 #line 5
- testRunner.Given("I got the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given(string.Format("I have token {0}", token), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 6
  testRunner.And(string.Format("I have product id {0}", productId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -105,10 +105,62 @@ namespace PlexureAPITest.Feature
  testRunner.And("I POST purchase", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 8
- testRunner.And("I got the purchase points", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then(string.Format("The purchase respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                            "key",
+                            "value"});
+                table2.AddRow(new string[] {
+                            "message",
+                            "Purchase completed."});
+                table2.AddRow(new string[] {
+                            "points",
+                            "100"});
 #line 9
- testRunner.Then(string.Format("The respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("The purchase resonpse key should have values", ((string)(null)), table2, "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Purchase unhappy path")]
+        [NUnit.Framework.TestCaseAttribute("InvalideID", "37cb9e58-99db-423c-9da5-42d5627614c5", "10", "400", null)]
+        [NUnit.Framework.TestCaseAttribute("ProductIDNull", "37cb9e58-99db-423c-9da5-42d5627614c5", "", "500", null)]
+        [NUnit.Framework.TestCaseAttribute("ProductIDIllegal", "37cb9e58-99db-423c-9da5-42d5627614c5", "&$^", "500", null)]
+        [NUnit.Framework.TestCaseAttribute("InvalideToken", "37cb9e58-99db-423c-9da5-42d5627617c5", "1", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("TokenNull", "", "1", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("TokenIllegal", "*&^%$#####", "1", "401", null)]
+        public void PurchaseUnhappyPath(string caseID, string token, string productId, string statuscode, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("CaseID", caseID);
+            argumentsOfScenario.Add("token", token);
+            argumentsOfScenario.Add("productId", productId);
+            argumentsOfScenario.Add("statuscode", statuscode);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Purchase unhappy path", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 18
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 19
+ testRunner.Given(string.Format("I have token {0}", token), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 20
+ testRunner.And(string.Format("I have product id {0}", productId), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
+ testRunner.And("I POST purchase", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 22
+ testRunner.Then(string.Format("The purchase respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

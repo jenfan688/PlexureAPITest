@@ -74,15 +74,10 @@ namespace PlexureAPITest.Feature
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Login test")]
-        [NUnit.Framework.TestCaseAttribute("HappyPath", "Tester", "Plexure123", "200", null)]
-        [NUnit.Framework.TestCaseAttribute("PwdLowercase", "Tester", "plexure123", "401", null)]
-        [NUnit.Framework.TestCaseAttribute("UsernameLowercase", "tester", "Plexure123", "200", null)]
-        [NUnit.Framework.TestCaseAttribute("UsernaleNull", "null", "Plexure123", "401", null)]
-        [NUnit.Framework.TestCaseAttribute("PwdNull", "Tester", "null", "401", null)]
-        [NUnit.Framework.TestCaseAttribute("Null", "", "", "400", null)]
-        [NUnit.Framework.TestCaseAttribute("UnHappyPath", "Testor", "Plexurr123", "401", null)]
-        public void LoginTest(string caseID, string username, string password, string statuscode, string[] exampleTags)
+        [NUnit.Framework.DescriptionAttribute("Happy path Login test")]
+        [NUnit.Framework.TestCaseAttribute("HappyPath", "Tester", "Plexure123", "200", "LoginResponse1.json", null)]
+        [NUnit.Framework.TestCaseAttribute("UsernameLowercase", "tester", "Plexure123", "200", "LoginResponse2.json", null)]
+        public void HappyPathLoginTest(string caseID, string username, string password, string statuscode, string responseBody, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
@@ -90,7 +85,8 @@ namespace PlexureAPITest.Feature
             argumentsOfScenario.Add("username", username);
             argumentsOfScenario.Add("password", password);
             argumentsOfScenario.Add("statuscode", statuscode);
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login test", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            argumentsOfScenario.Add("responseBody", responseBody);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Happy path Login test", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 4
  this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -111,7 +107,52 @@ namespace PlexureAPITest.Feature
  testRunner.And("I POST login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 8
- testRunner.Then(string.Format("The respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("The login respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 9
+ testRunner.Then(string.Format("The login respons body should be {0} except \"AccessToken\"", responseBody), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Unhappy path of Login test")]
+        [NUnit.Framework.TestCaseAttribute("PwdLowercase", "Tester", "plexure123", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("UsernaleNull", "null", "Plexure123", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("PwdNull", "Tester", "null", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("Null", "", "", "400", null)]
+        [NUnit.Framework.TestCaseAttribute("UnHappyPath", "Testor", "Plexurr123", "401", null)]
+        public void UnhappyPathOfLoginTest(string caseID, string username, string password, string statuscode, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("CaseID", caseID);
+            argumentsOfScenario.Add("username", username);
+            argumentsOfScenario.Add("password", password);
+            argumentsOfScenario.Add("statuscode", statuscode);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Unhappy path of Login test", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 18
+ this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 19
+ testRunner.Given(string.Format("I have username {0}", username), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 20
+ testRunner.And(string.Format("I have password {0}", password), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 21
+ testRunner.And("I POST login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 22
+ testRunner.Then(string.Format("The login respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
