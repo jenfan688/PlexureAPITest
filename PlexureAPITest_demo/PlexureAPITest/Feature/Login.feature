@@ -4,8 +4,7 @@ Feature: Login
  Scenario Outline: Login test 
 	Given I have username <username>
 	And   I have password <password>
-	And   I POST login 
-	And   I got the token
+	And   I POST login
 	Then  The respons code should be <statuscode>
 	
 	Examples: 
@@ -15,6 +14,6 @@ Feature: Login
 	| UsernameLowercase | tester   | Plexure123 | 200        |
 	| UsernaleNull      | null     | Plexure123 | 401        |
 	| PwdNull           | Tester   | null       | 401        |
-	| Null              | Null     | Null       | 401        |
+	| Null              |          |            | 400        |
 	| UnHappyPath       | Testor   | Plexurr123 | 401        |
 

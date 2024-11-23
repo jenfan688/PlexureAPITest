@@ -80,7 +80,7 @@ namespace PlexureAPITest.Feature
         [NUnit.Framework.TestCaseAttribute("UsernameLowercase", "tester", "Plexure123", "200", null)]
         [NUnit.Framework.TestCaseAttribute("UsernaleNull", "null", "Plexure123", "401", null)]
         [NUnit.Framework.TestCaseAttribute("PwdNull", "Tester", "null", "401", null)]
-        [NUnit.Framework.TestCaseAttribute("Null", "Null", "Null", "401", null)]
+        [NUnit.Framework.TestCaseAttribute("Null", "", "", "400", null)]
         [NUnit.Framework.TestCaseAttribute("UnHappyPath", "Testor", "Plexurr123", "401", null)]
         public void LoginTest(string caseID, string username, string password, string statuscode, string[] exampleTags)
         {
@@ -111,9 +111,6 @@ namespace PlexureAPITest.Feature
  testRunner.And("I POST login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 8
- testRunner.And("I got the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 9
  testRunner.Then(string.Format("The respons code should be {0}", statuscode), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

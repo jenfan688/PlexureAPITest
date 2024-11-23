@@ -139,8 +139,12 @@
     <Compile Include="TestConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="appsettings.json" />
+    <None Include="app.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Feature\Getpoints.feature" />
     <None Include="Feature\Login.feature" />
     <None Include="Feature\Purchase.feature" />
