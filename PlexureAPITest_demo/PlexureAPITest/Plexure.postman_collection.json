@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "b467ed93-822a-4cee-887f-97a1f9e25b0d",
+		"name": "Plexure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39899139"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/JSON",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"username\": \"Tester\",\n\"password\": \"Plexure123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "Https://qatestapi.azurewebsites.net/api/login",
+					"protocol": "Https",
+					"host": [
+						"qatestapi",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Purchase",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/JSON",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "37cb9e58-99db-423c-9da5-42d5627614c5",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"ProductId\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "Https://qatestapi.azurewebsites.net/api/purchase",
+					"protocol": "Https",
+					"host": [
+						"qatestapi",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"purchase"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPoints",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/JSON",
+						"type": "text"
+					},
+					{
+						"key": "token",
+						"value": "37cb9e58-99db-423c-9da5-42d5627614c5",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"product_id\": 10\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "Https://qatestapi.azurewebsites.net/api/points",
+					"protocol": "Https",
+					"host": [
+						"qatestapi",
+						"azurewebsites",
+						"net"
+					],
+					"path": [
+						"api",
+						"points"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

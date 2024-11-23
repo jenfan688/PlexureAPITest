@@ -137,7 +137,7 @@ namespace PlexureAPITest
 
                     else
                     {
-                        points.Value = 0; // default case for invalid productId
+                        points.Value = 0;
                     }
                     return new Response<PointsEntity>(response.StatusCode, points);
                 }

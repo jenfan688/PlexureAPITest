@@ -1,0 +1,12 @@
+{
+    "language": "en-US",
+    "plugins": [
+        {
+            "name": "LivingDocPlugin",
+            "parameters": {
+                "outputFolder": "Report",
+                "generateJson": "true"
+            }
+        }
+    ]
+}

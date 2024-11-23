@@ -114,8 +114,9 @@ namespace PlexureAPITest
         public Task LoginResponsBodyShouldBeExceptAccessToken(string expectedResponseBodyFile,string jobjectItem)
         {
             var actualResponseBody = _loginResponse.Entity;
-
-            string expectedJson = File.ReadAllText(Path.Combine(@"C:\Users\yujia\workSpace\PlexureAPITest\PlexureAPITest_demo\PlexureAPITest\Responsfiles\", expectedResponseBodyFile));
+            string binDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string projectRoot = Path.GetFullPath(Path.Combine(binDirectory, @"..\..\"));
+            string expectedJson = File.ReadAllText(Path.Combine(projectRoot,"Responsfiles", expectedResponseBodyFile));
             var actualResponseJson = JsonConvert.SerializeObject(actualResponseBody, Formatting.Indented);
             var expectedResponseJson = expectedJson;
 
