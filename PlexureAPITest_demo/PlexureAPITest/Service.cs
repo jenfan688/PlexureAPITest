@@ -97,14 +97,14 @@ namespace PlexureAPITest
             client.DefaultRequestHeaders.Add("token", accessToken);
 
             var response =await client.PostAsync("purchase", httpContent);
-            if(response.IsSuccessStatusCode)
+            var content = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
                 {
-                    var purchase = JsonConvert.DeserializeObject<PurchaseEntity>(response.Content.ReadAsStringAsync().Result);
-
+                    var purchase = JsonConvert.DeserializeObject<PurchaseEntity>(content);
                     return new Response<PurchaseEntity>(response.StatusCode, purchase);
                 }
 
-                return new Response<PurchaseEntity>(response.StatusCode, response.Content.ReadAsStringAsync().Result);
+                return new Response<PurchaseEntity>(response.StatusCode, content);
         }
 
         public async Task <Response<PointsEntity>> GetPoints(string productId,string tokenForPoints)
@@ -117,10 +117,11 @@ namespace PlexureAPITest
             client.DefaultRequestHeaders.Remove("token");
             client.DefaultRequestHeaders.Add("token", tokenForPoints);
             var  response = await client.GetAsync("points");
+            var content = await response.Content.ReadAsStringAsync();
             {
                 if(response.IsSuccessStatusCode)
                 {
-                    var points = JsonConvert.DeserializeObject<PointsEntity>(response.Content.ReadAsStringAsync().Result);
+                    var points = JsonConvert.DeserializeObject<PointsEntity>(content);
                     if (productId == "1")
                     {
                         points.Value = 739100;
@@ -142,15 +143,18 @@ namespace PlexureAPITest
                     return new Response<PointsEntity>(response.StatusCode, points);
                 }
 
-               return new Response<PointsEntity>(response.StatusCode, response.Content.ReadAsStringAsync().Result);
+               return new Response<PointsEntity>(response.StatusCode, content);
             }
         }
+        private static readonly object disposeLock = new object();
         public void Dispose()
         {
-            if (client != null)
+            lock(disposeLock){ 
+           if (client != null)
             {
                 client.Dispose();
                 client = null;
+            } 
             }
         }
     }
