@@ -30,8 +30,6 @@ namespace PlexureAPITest
                 service = null;
             }
         }
-
-
         //Example test cases:
         //Candidate can add as many test cases as you can. 
         //You can also add some comments if need. 
